@@ -1,0 +1,18 @@
+{
+  "dependencies": {
+    "@types/bcryptjs": "^2.4.1",
+    "@types/validator": "^6.3.0",
+    "bcryptjs": "^2.4.3",
+    "expo": "^23.0.1",
+    "graphcool-lib": "^0.1.0",
+    "graphql-request": "^1.4.0",
+    "react-apollo": "^2.0.1",
+    "react-native-invertible-scroll-view": "^1.1.0",
+    "react-native-keyboard-spacer": "^0.4.1",
+    "react-native-prompt": "^1.0.0",
+    "validator": "^9.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^8.0.44"
+  }
+}

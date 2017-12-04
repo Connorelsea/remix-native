@@ -1,0 +1,107 @@
+type User @model {
+  id: ID! @isUnique
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  username: String! @isUnique
+  name: String!
+  password: String!
+  groups: [Group!]! @relation(name: "UsersGroups")
+  messages: [Message!]! @relation(name: "UserMessages")
+  sentFriendRequests: [FriendRequest!]! @relation(name: "SentFriendRequests")
+  receivedFriendRequests: [FriendRequest!]!
+    @relation(name: "ReceivedFriendRequests")
+  sentExternalFriendRequests: [ExternalFriendRequest!]!
+    @relation(name: "ExternalFriendRequests")
+  color: String
+  friends: [User!]! @relation(name: "UsersFriends")
+}
+
+# User Add Request
+# CREATE: Friend Request (createFriendRequest)
+# When accepted, this fires a function that creates
+# a group with users [fromId, toId]
+type FriendRequest @model {
+  id: ID! @isUnique
+  createdAt: DateTime!
+  fromUser: User! @relation(name: "SentFriendRequests")
+  toUser: User! @relation(name: "ReceivedFriendRequests")
+}
+
+type ExternalFriendRequest @model {
+  id: ID! @isUnique
+  createdAt: DateTime!
+  contactType: ContactType!
+  fromUser: User! @relation(name: "ExternalFriendRequests")
+}
+
+enum ContactType {
+  PHONE_NUMBER
+  EMAIL
+}
+
+# User Add Request Type
+# EXISTING USER: Look up the username's ID. Create group
+#                with that ID and the from ID.
+# WAIT_CONTACT_NEW_USER: Contact this currently non-existant
+#                user. Give them a link. At the link they choose
+#                a username. The link then creates their account.
+#                The link then prompts them to install the app.
+#                Show this new user information about their friend.
+enum FriendRequestType {
+  EXISTING_USER
+  WAIT_CONTACT_NEW_USER
+}
+
+type Group @model {
+  id: ID! @isUnique
+  createdAt: DateTime!
+  name: String
+  description: String
+  imageUrl: String
+  users: [User!]! @relation(name: "UsersGroups")
+  channels: [Channel!]! @relation(name: "GroupChannels")
+  type: GroupType!
+}
+
+enum GroupType {
+  FRIEND
+  GROUP
+}
+
+type Channel @model {
+  id: ID! @isUnique
+  createdAt: DateTime!
+  name: String!
+  messages: [Message!]! @relation(name: "ChannelMessages")
+  group: Group @relation(name: "GroupChannels")
+}
+
+type Message @model {
+  id: ID! @isUnique
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  sender: User @relation(name: "UserMessages")
+  channel: Channel! @relation(name: "ChannelMessages")
+  object: Object @relation(name: "MessageObject")
+  text: String
+  type: MessageType!
+}
+
+enum MessageType {
+  TEXT
+  FORWARD
+  ORIGINAL
+}
+
+type Object @model {
+  id: ID! @isUnique
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  message: Message! @relation(name: "MessageObject")
+  content: String!
+  type: ObjectType!
+}
+
+enum ObjectType {
+  TEXT
+}

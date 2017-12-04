@@ -1,0 +1,11 @@
+type FriendRequestPayload {
+  id: ID!
+}
+
+extend type Mutation {
+  friendRequest(
+    fromUserId: String!
+    toUserString: String!
+    contactType: String!
+  ): FriendRequestPayload
+}

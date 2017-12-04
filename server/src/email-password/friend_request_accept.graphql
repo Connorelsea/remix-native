@@ -1,0 +1,7 @@
+type payload {
+  id: ID!
+}
+
+extend type Mutation {
+  acceptFriendRequest(friendRequestId: ID!): payload
+}

@@ -1,0 +1,7 @@
+{
+  "extends": ["standard", "standard-react", "prettier"],
+  "plugins": ["class-property"],
+  "rules": {
+    "class-property/rule-name": 2
+  }
+}
