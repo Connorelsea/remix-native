@@ -2,6 +2,18 @@
 
 Remix is a free, modern, fast, and user-friendly group messaging app.
 
+* Connect with current friends
+* Group chats with channels
+* Find new friends and groups through community features
+
+#### Power User Features
+
+* Cross-platform modern design
+* Battery saving OLED/dark-mode (light mode available)
+* iPhone X support
+
+![image of remix dark UI](https://i.imgur.com/sNbPIaz.png)
+
 ## Where? What?
 
 Remix runs on React, React Native, and GraphQL. The initial alpha releases are
@@ -15,7 +27,10 @@ producing a quality product.
 
 ## Inspiration
 
-Inspired by Slack, Telegram, Apple's watchOS.
+Inspired by Slack, Telegram, Apple's watchOS, and my childhood experience with
+AOL and AIM.
+
+## Developer Information
 
 This project was bootstrapped with
 [Create React Native App](https://github.com/react-community/create-react-native-app).
