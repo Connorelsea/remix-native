@@ -69,7 +69,7 @@ export default class MessageList extends Component {
         <FlatList
           inverted
           data={messages}
-          // contentInset={{ top: 10, bottom: 70 }}
+          contentInset={{ top: 10, bottom: 70 }}
           keyExtractor={(item, index) => item.id}
           renderItem={({ item }) => (
             <Message
