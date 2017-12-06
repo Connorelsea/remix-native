@@ -24,7 +24,7 @@ class ChannelList extends React.Component {
     } else if (this.props.channelQuery) {
       return (
         <Container>
-          {/* <Title>Channels</Title>
+          <Title>Channels</Title>
           <ScrollView>
             {this.props.channelQuery.allChannels.map(channel => (
               <ChannelButton
@@ -37,7 +37,7 @@ class ChannelList extends React.Component {
                 </Channel>
               </ChannelButton>
             ))}
-          </ScrollView> */}
+          </ScrollView>
         </Container>
       )
     }

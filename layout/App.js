@@ -70,9 +70,7 @@ class App extends React.Component {
         console.log("NEW MESSAGE")
         console.log(prev, subscriptionData)
 
-        if (!subscriptionData.data) {
-          return prev
-        }
+        if (!subscriptionData.data) return prev
 
         const newMessage = subscriptionData.data.Message.node
 
@@ -80,6 +78,20 @@ class App extends React.Component {
           ...prev,
           allMessages: [...prev.allMessages, newMessage],
         }
+      },
+    })
+
+    this.props.allFriendsQuery.subscribeToMore({
+      document: ALL_FRIENDS_SUBSCRIPTION,
+      variables: {
+        userId: this.props.userId,
+      },
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData.data) return prev
+
+        const newGroup = {}
+        // TODO: Implement new group query here
+        // (Might be better to query on Groups directly, filter by members)
       },
     })
   }
@@ -119,10 +131,10 @@ class App extends React.Component {
         ? this.props.allMessagesQuery.allMessages
         : []
 
-    // if (this.state.subscribed === false && this.props.userId !== undefined) {
-    //   this.setState({ subscribed: true })
-    //   this.subscribe()
-    // }
+    if (this.state.subscribed === false && this.props.userId !== undefined) {
+      this.setState({ subscribed: true })
+      this.subscribe()
+    }
 
     const { groupSelection, channelSelection } = this.state
     const { setGroupSelection, setChannelSelection } = this
@@ -139,6 +151,7 @@ class App extends React.Component {
             setChannelSelection={setChannelSelection}
             groups={groups}
             userId={this.props.userId}
+            logout={this.props.logout}
           />
           {groupSelection && (
             <ChannelList
@@ -172,6 +185,27 @@ const ALL_FRIENDS = gql`
         users {
           name
           id
+        }
+      }
+    }
+  }
+`
+
+const ALL_FRIENDS_SUBSCRIPTION = gql`
+  subscription onNewFriend($userId: ID!) {
+    User(filter: { mutation_in: [CREATED], node: { id: $userId } }) {
+      mutation
+      node {
+        groups {
+          id
+          name
+          channels {
+            id
+          }
+          users {
+            name
+            id
+          }
         }
       }
     }

@@ -25,8 +25,8 @@ class FriendSection extends React.Component {
 export default FriendSection
 
 const Section = styled.View`
-  border-bottom-width: 1px;
-  border-bottom-color: ${colors.grey[800]};
+  /* border-bottom-width: 1px; */
+  /* border-bottom-color: ${colors.grey[800]}; */
   margin-bottom: 20px;
 `
 

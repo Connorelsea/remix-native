@@ -1,5 +1,11 @@
 import React from "react"
-import { View, Text, Image, TouchableHighlight } from "react-native"
+import {
+  View,
+  Text,
+  Image,
+  TouchableHighlight,
+  AsyncStorage,
+} from "react-native"
 import styled from "styled-components/native"
 import colors from "../../colors.js"
 import { isIphoneX } from "react-native-iphone-x-helper"
@@ -135,6 +141,7 @@ class FriendList extends React.Component {
       <Container>
         <Title>Friends</Title>
         <Button title="Add Friend" onPress={this.onAddPress} />
+        <Button title="Logout" onPress={this.props.logout} />
         {/* <Button title="New Group" /> */}
 
         {console.log("get friend requests", this.props.getSentRequests)}
@@ -149,13 +156,13 @@ class FriendList extends React.Component {
               <RequestCard friendRequestId={id} user={fromUser} />
             )}
           />
-          <FriendSection
+          {/* <FriendSection
             title="Friends"
             data={friends}
             renderItem={({ name, username, id }) => (
               <Text style={{ color: "white" }}>{name}</Text>
             )}
-          />
+          /> */}
           <FriendSection
             title="Groups"
             data={groups}

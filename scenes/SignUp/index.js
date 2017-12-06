@@ -12,6 +12,7 @@ class SignUp extends Component {
     this.createUser = this.createUser.bind(this)
     this.loginUser = this.loginUser.bind(this)
   }
+
   async createUser() {
     const { username, password, name } = this.state
 
