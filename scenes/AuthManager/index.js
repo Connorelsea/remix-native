@@ -5,6 +5,7 @@ import AppLayout from "../../layout/App"
 import { StyleSheet, Text, View, AsyncStorage } from "react-native"
 
 import NoAuth from "../NoAuth"
+import Loading from "./Loading"
 
 class AuthManager extends Component {
   state = {
@@ -67,21 +68,34 @@ class AuthManager extends Component {
     const { loading, loggedIn, user, logout } = this.state
     const { login, signup } = this
 
-    if (loginQuery.loading != loading) {
+    if (loginQuery.loading !== loading) {
       this.setState({ loading: loginQuery.loading })
     }
 
-    if (loginQuery.loggedInUser && !loggedIn && !logout) {
+    if (loading || loginQuery.loading) return <Loading />
+
+    if (
+      loginQuery.loggedInUser &&
+      loginQuery.loggedInUser !== null &&
+      !loggedIn &&
+      !logout
+    ) {
       this.setState({ loggedIn: true, user: loginQuery.loggedInUser })
     }
 
-    if (loggedIn) return <AppLayout userId={user.id} logout={this.logout} />
+    if (loggedIn)
+      return (
+        <AppLayout
+          userId={user ? user.id : loginQuery.loggedInUser.id}
+          logout={this.logout}
+        />
+      )
     else {
-      if (logout) this.setState({ logout: false })
       return (
         <NoAuth
           screenProps={{
             login: this.login,
+            signup: this.signup,
           }}
         />
       )
