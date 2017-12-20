@@ -1,4 +1,17 @@
 export default {
+  apple: {
+    grey: ["#FFFFFF", "#EDEBF1", "#E1E2E7", "#D4D4D7", "#828282", "#030303"],
+  },
+  theme: {
+    radius: "8px",
+    background: "#efeff4",
+    title: "black",
+    subtitle: "#8e8e93",
+    paragraph: "#000",
+    button: {
+      background: "#ceced2",
+    },
+  },
   red: {
     "50": "#ffebee",
     "100": "#ffcdd2",

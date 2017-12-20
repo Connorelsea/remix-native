@@ -1,7 +1,9 @@
 import React, { Component } from "react"
-import { View, TextInput, Text } from "react-native"
+import { View, TextInput, Text, StatusBar } from "react-native"
 import styled from "styled-components/native"
 import colors from "../../colors.js"
+
+import Signup from "./Signup"
 
 class PathChooser extends Component {
   state = { username: "", password: "" }
@@ -22,32 +24,54 @@ class PathChooser extends Component {
   }
 
   render() {
-    const { login, signup } = this.props
+    const { loading, login, signup } = this.props
+
+    if (loading) {
+      return (
+        <PathView>
+          <StatusBar barStyle="dark-content" />
+          <ViewTitle>Remix</ViewTitle>
+          <PathSubTitle>MADE BY ELSEA LABS</PathSubTitle>
+        </PathView>
+      )
+    }
 
     return (
       <PathView>
-        <ViewTitle>Remix</ViewTitle>
-        <ViewSubtitle>MADE BY ELSEA LABS</ViewSubtitle>
+        <StatusBar barStyle="dark-content" />
+
+        <PathCard>
+          <PathTitle title="Remix" subtitle="Made by Elsea Labs" />
+          <Paragraph>Lorem ipsum test</Paragraph>
+          <VersionContainer>
+            <VersionTitle>ALPHA</VersionTitle>
+            <Version>1.0.0</Version>
+          </VersionContainer>
+        </PathCard>
+
         <PathCard>
           <PathTitle title="Login" subtitle="Existing User" />
           <InputContainer>
             <Input placeholder="Username" onPress={this.setUsername} />
             <Input placeholder="Password" onPress={this.setPassword} />
           </InputContainer>
+
           <ButtonContainer>
             <Button color="black" onPress={login}>
               <ButtonText>Log In</ButtonText>
             </Button>
           </ButtonContainer>
         </PathCard>
+
         <PathCard>
-          <PathTitle title="Sign Up" subtitle="New User" />
+          <PathTitle title="New User" subtitle="Join the Community" />
           <InputContainer>
             <Input placeholder="Username" onPress={this.setUsername} />
           </InputContainer>
+
           <ButtonContainer>
             <Button color={colors.blue[400]} onPress={signup}>
-              <ButtonText>Sign Up</ButtonText>
+              <ButtonText>Join</ButtonText>
             </Button>
           </ButtonContainer>
         </PathCard>
@@ -56,57 +80,89 @@ class PathChooser extends Component {
   }
 }
 
+const VersionContainer = styled.View`
+  position: absolute;
+  top: 20;
+  right: 15;
+  padding: 5px 10px;
+  background-color: ${colors.blueGrey[200]};
+  border-radius: 10px;
+  flex-direction: row;
+`
+
+const Version = styled.Text`
+  color: ${colors.blueGrey[500]};
+  background-color: transparent;
+  font-weight: 300;
+  text-align: right;
+`
+
+const VersionTitle = styled.Text`
+  color: ${colors.blueGrey[700]};
+  background-color: transparent;
+  font-weight: 800;
+  letter-spacing: 1;
+  margin-right: 5px;
+`
+
+const Paragraph = styled.Text``
+
 const ViewTitle = styled.Text`
   font-size: 70px;
-  font-weight: 200;
-  color: white;
+  font-weight: 100;
+  color: ${colors.blueGrey[200]};
 `
 
-const ViewSubtitle = styled.Text`
-  font-size: 14px;
-  font-weight: 700;
-  color: ${colors.grey[700]};
-  margin-bottom: 30px;
-`
-
-const PathView = styled.View`
-  padding: 40px;
-  background-color: black;
+const PathView = styled.ScrollView`
+  padding: 30px;
+  background-color: #eee;
   flex: 1;
-  justify-content: center;
+  /* justify-content: center; */
 `
 
 const PathCard = styled.View`
   background-color: white;
-  padding: 20px 25px;
-  border-radius: 12px;
+  padding: 25px 20px;
+  border-radius: 20px;
   margin-bottom: 25px;
+  padding-bottom: 32px;
+  shadow-opacity: 0.1;
+  shadow-radius: 10px;
+  shadow-color: black;
+  shadow-offset: 0px 10px;
+  position: relative;
 `
 
 const PathTitle = ({ title, subtitle }) => [
-  <PathMainTitle key={title}>{title}</PathMainTitle>,
   <PathSubTitle key={subtitle}>{subtitle.toUpperCase()}</PathSubTitle>,
+  <PathMainTitle key={title}>{title}</PathMainTitle>,
+  <Padding x="15" />,
 ]
+
+const Padding = styled.View`
+  flex: 1;
+  width: 100%;
+  min-height: ${props => props.x}px;
+`
 
 const PathMainTitle = styled.Text`
   font-size: 32px;
   color: black;
   font-weight: 800;
   font-family: System;
-  padding-bottom: 5px;
+  background-color: transparent;
 `
 
 const PathSubTitle = styled.Text`
-  font-size: 14px;
-  color: ${colors.grey[400]};
-  font-weight: 700;
-  margin-top: 2px;
-  margin-bottom: 15px;
+  font-size: 12px;
+  color: ${colors.blueGrey[500]};
+  font-weight: 800;
   font-family: System;
+  letter-spacing: 1px;
 `
 
 const InputContainer = styled.View`
-  padding: 0 15px;
+  padding: 0 10px;
   margin-bottom: 10px;
 `
 
@@ -125,9 +181,13 @@ const ButtonContainer = styled.View`
 const Button = styled.TouchableOpacity`
   background-color: ${props => props.color};
   font-weight: 600;
-  padding: 10px 16px;
-  border-radius: 17px;
+  /* min-height: 35px;
+  min-width: 80px; */
+  padding: 12px 25px;
+  border-radius: 60px;
   margin-left: 10px;
+  justify-content: center;
+  align-items: center;
 `
 
 const ButtonText = styled.Text`
@@ -135,6 +195,7 @@ const ButtonText = styled.Text`
   font-family: System;
   font-weight: 600;
   color: white;
+  background-color: transparent;
 `
 
 const VIEW_SIGNUP = Symbol("VIEW_SIGNUP")
@@ -173,17 +234,18 @@ class Onboarding extends Component {
   render() {
     const { login, signup } = this
     const { view } = this.state
+    const { loading } = this.props
 
     switch (view) {
       case VIEW_LOGIN:
         return <Text>Login</Text>
 
       case VIEW_SIGNUP:
-        return <Text>Signup</Text>
-
+        return <Signup />
       default:
+
       case VIEW_PATH:
-        return <PathChooser login={login} signup={signup} />
+        return <PathChooser loading={loading} login={login} signup={signup} />
     }
   }
 }

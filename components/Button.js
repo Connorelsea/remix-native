@@ -1,20 +1,25 @@
 import React, { Component } from "react"
-import { Button } from "react-native"
 import styled from "styled-components/native"
+import colors from "../colors.js"
 
-export default class NativeButton extends Component {
+export default class Button extends React.Component {
   render() {
     return (
-      <Button
-        onPress={() =>
-          this.props.navigation.navigate(this.props.to, this.props.options)}
-        title={this.props.title}
-      />
+      <Opacity onPress={this.props.onPress}>
+        <ButtonText>{this.props.children}</ButtonText>
+      </Opacity>
     )
   }
 }
 
-const StyledButton = styled.Button`
-  border: 1px solid black;
-  background-color: white;
+const Opacity = styled.TouchableOpacity`
+  border-radius: ${colors.theme.radius}
+  overflow: hidden;
+`
+
+const ButtonText = styled.Text`
+  background-color: ${colors.theme.button.background};
+  padding: 15px 30px;
+  text-align: center;
+  font-weight: 400;
 `

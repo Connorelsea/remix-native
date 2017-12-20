@@ -3,13 +3,14 @@ import { graphql, compose } from "react-apollo"
 import gql from "graphql-tag"
 import AppLayout from "../../layout/App"
 import { StyleSheet, Text, View, AsyncStorage } from "react-native"
-import SignUp from "../SignUp"
-import Onboarding from "../Onboarding"
+
+import NoAuth from "../NoAuth"
 
 class AuthManager extends Component {
   state = {
     loading: true,
     loggedIn: false,
+    logout: false,
     user: undefined,
     errors: [],
   }
@@ -34,6 +35,7 @@ class AuthManager extends Component {
 
   async login({ username, password }) {
     console.debug("AuthManager: Logging In User")
+    console.log(username, password)
     const { loginQuery } = this.props
 
     try {
@@ -56,28 +58,54 @@ class AuthManager extends Component {
   }
 
   logout() {
-    this.setState({ loggedIn: false })
     AsyncStorage.removeItem("graphcoolToken")
+    this.setState({ loggedIn: false, logout: true })
   }
 
   render() {
     const { loginQuery } = this.props
-    const { loading, loggedIn, user } = this.state
+    const { loading, loggedIn, user, logout } = this.state
     const { login, signup } = this
 
     if (loginQuery.loading != loading) {
       this.setState({ loading: loginQuery.loading })
     }
 
-    if (loginQuery.loggedInUser && !loggedIn) {
+    if (loginQuery.loggedInUser && !loggedIn && !logout) {
       this.setState({ loggedIn: true, user: loginQuery.loggedInUser })
     }
 
-    if (loading) return <Text>Loading</Text>
     if (loggedIn) return <AppLayout userId={user.id} logout={this.logout} />
-    else return <Onboarding login={login} signup={signup} />
+    else {
+      if (logout) this.setState({ logout: false })
+      return (
+        <NoAuth
+          screenProps={{
+            login: this.login,
+          }}
+        />
+      )
+    }
   }
 }
+
+const AUTH_USER = gql`
+  mutation AuthenticateUser($username: String!, $password: String!) {
+    authenticateUser(username: $username, password: $password) {
+      id
+      token
+    }
+  }
+`
+
+const SIGN_UP_USER = gql`
+  mutation SignupUser($username: String!, $password: String!, $name: String!) {
+    signupUser(username: $username, password: $password, name: $name) {
+      id
+      token
+    }
+  }
+`
 
 const LOGGED_IN_USER = gql`
   query LoggedInUser {
@@ -87,7 +115,11 @@ const LOGGED_IN_USER = gql`
   }
 `
 
-export default graphql(LOGGED_IN_USER, {
-  name: "loginQuery",
-  options: { fetchPolicy: "network-only" },
-})(AuthManager)
+export default compose(
+  graphql(LOGGED_IN_USER, {
+    name: "loginQuery",
+    options: { fetchPolicy: "network-only" },
+  }),
+  graphql(SIGN_UP_USER, { name: "signupUserMutation" }),
+  graphql(AUTH_USER, { name: "authenticateUserMutation" })
+)(AuthManager)

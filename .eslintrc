@@ -1,7 +1,8 @@
 {
+  "parser": "babel-eslint",
   "extends": ["standard", "standard-react", "prettier"],
   "plugins": ["class-property"],
   "rules": {
-    "class-property/rule-name": 2
+    "class-property/class-property-semicolon": ["error", "never"]
   }
 }
