@@ -12,7 +12,9 @@ Remix is a free, modern, fast, and user-friendly group messaging app.
 * Battery saving OLED/dark-mode (light mode available)
 * iPhone X support
 
-![image of remix dark UI](https://i.imgur.com/sNbPIaz.png)
+Preview UI Image
+
+![image](https://i.imgur.com/6YgKRmI.jpg)
 
 ## Where? What?
 

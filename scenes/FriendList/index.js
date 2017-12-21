@@ -270,7 +270,7 @@ const IconContainer = styled.View`
 const Title = styled.Text`
   font-size: 40px;
   letter-spacing: -0.2px;
-  font-weight: 700;
+  font-weight: 900;
   color: white;
   margin-bottom: 10px;
   padding-top: ${isIphoneX() ? 50 : 20};
