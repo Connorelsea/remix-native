@@ -12,8 +12,20 @@ type User @model {
     @relation(name: "ReceivedFriendRequests")
   sentExternalFriendRequests: [ExternalFriendRequest!]!
     @relation(name: "ExternalFriendRequests")
+  sentGroupInvitations: [GroupInvitation!]!
+    @relation(name: "SentGroupInvitations")
+  receivedGroupInvitations: [GroupInvitation!]!
+    @relation(name: "ReceivedGroupInvitations")
   color: String
   friends: [User!]! @relation(name: "UsersFriends")
+}
+
+type GroupInvitation @model {
+  id: ID! @isUnique
+  createdAt: DateTime!
+  fromUser: User! @relation(name: "SentGroupInvitations")
+  toUser: User! @relation(name: "ReceivedGroupInvitations")
+  group: Group! @relation(name: "PendingGroupInvitations")
 }
 
 # User Add Request
@@ -61,6 +73,8 @@ type Group @model {
   users: [User!]! @relation(name: "UsersGroups")
   channels: [Channel!]! @relation(name: "GroupChannels")
   type: GroupType!
+  pendingSentGroupInvitations: [GroupInvitation!]!
+    @relation(name: "PendingGroupInvitations")
 }
 
 enum GroupType {
